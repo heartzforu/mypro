@@ -24,7 +24,7 @@ function Expense() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-300 flex flex-col items-center py-10">
       {/* Form Section */}
-      <div className="bg-blue shadow-lg rounded-lg p-8 w-full max-w-md mt-20">
+      <div className="bg-blue-100 shadow-lg rounded-lg p-8 w-full max-w-md mt-20">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Expense Tracker</h2>
         <form onSubmit={handleSubmit} className="space-y-4 bg-">
           <input

@@ -36,7 +36,13 @@ function ResponsiveNavbar() {
 
           {/* Profile Section */}
           <div className="flex items-center">
-            <FaUserCircle className="text-white text-3xl hover:text-yellow-300 transition cursor-pointer" onClick={handleLogout} />
+            <FaUserCircle className="text-white text-3xl hover:text-yellow-300 transition cursor-pointer"  />
+            <button
+            onClick={handleLogout} 
+            className="block w-full text-white text-left font-medium py-2 hover:bg-purple-700 rounded-lg transition"
+          >
+            Logout
+          </button>
           </div>
         </div>
       </div>
