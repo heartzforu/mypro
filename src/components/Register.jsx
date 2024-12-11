@@ -55,7 +55,7 @@ function Register() {
 
   return (
     <div className="h-screen flex items-center justify-center bg-gradient-to-br from-teal-400 via-purple-500 to-pink-600">
-      <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-lg w-full backdrop-blur-md">
+      <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-lg w-full backdrop-blur-md ">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create a New Account</h2>
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
@@ -94,7 +94,7 @@ function Register() {
             {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email}</p>}
           </div>
 
-          <div>
+          {/* <div>
             <label htmlFor="phone" className="block text-lg text-gray-700">Phone Number</label>
             <input
               type="text"
@@ -104,7 +104,7 @@ function Register() {
               className={`w-full p-3 border-2 rounded-lg mt-2 ${errors.phone ? "border-red-500" : "border-gray-300"}`}
             />
             {errors.phone && <p className="text-red-500 text-sm mt-2">{errors.phone}</p>}
-          </div>
+          </div> */}
 
           <div>
             <label htmlFor="password" className="block text-lg text-gray-700">Password</label>
