@@ -20,6 +20,8 @@ function Expense() {
   const deleteExpense = (index) => {
     setExpenses(expenses.filter((_, i) => i !== index));
   };
+  const calculateExpense=expenses
+  .reduce((total,expense)=> total + expense.amount,0)
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-300 flex flex-col items-center py-10">
@@ -88,6 +90,11 @@ function Expense() {
         {expenses.length === 0 && (
           <p className="text-center text-gray-500 text-lg mt-10">No expenses added yet.</p>
         )}
+        <div className="shadow-lg rounded-lg mt-10 w-full max-w-2xl-4 text-right">
+          <h3>
+            Total Expense: ${calculateExpense.toFixed(2)}
+          </h3>
+        </div>
       </div>
     </div>
   );

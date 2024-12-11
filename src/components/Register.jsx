@@ -16,7 +16,6 @@ function Register() {
     name: yup.string().required("Name is required"),
     username: yup.string().required("Please select a username"),
     email: yup.string().email("Invalid email").required("Email is required"),
-
     password: yup
       .string()
       .min(6, "Password must be at least 6 characters")
