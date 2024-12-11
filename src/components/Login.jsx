@@ -1,104 +1,83 @@
-import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Link } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-function LoginPage({ setIsLoggedIn }) {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({});
+function Login() {
+  const [data, setData] = useState({ username: "", password: "" });
+  const [error, setError] = useState({ username: "", password: "" });
   const navigate = useNavigate();
 
-  // Validation schema
-  const validationSchema = Yup.object({
-    username: Yup.string()
-      .required('Username is required')
-      .min(3, 'Username must be at least 3 characters long')
-      .max(8, 'Username must be less than 8 characters'),
-    password: Yup.string()
-      .required('Password is required')
-      .min(6, 'Password must be at least 6 characters long')
-      .max(10, 'Password must be less than 10 characters'),
-  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setData({ ...data, [name]: value });
+  };
 
-  const handleLogin = () => {
-    // Validate form inputs
-    validationSchema
-      .validate({ username, password }, { abortEarly: false })
-      .then(() => {
-        const users = JSON.parse(localStorage.getItem('users')) || []; // Retrieve registered users
-        const user = users.find((user) => user.username === username && user.password === password);
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-        if (user) {
-          localStorage.setItem('isLoggedIn', 'true'); // Mark user as logged in
-          setIsLoggedIn(true); // Update parent state
-          navigate('/dashboard'); // Redirect to expenses page
-        } else {
-          alert('Invalid username or password');
-        }
-      })
-      .catch((err) => {
-        const validationErrors = err.inner.reduce((acc, curr) => {
-          acc[curr.path] = curr.message;
-          return acc;
-        }, {});
-        setErrors(validationErrors); // Set validation errors in state
-      });
+    const storedData = JSON.parse(localStorage.getItem("users"));
+    const user = storedData?.find(
+      (element) =>
+        element.username === data.username && element.password === data.password
+    );
+
+    if (user) {
+      alert("Login Successful!");
+      navigate("/expense");
+    } else {
+      setError({ username: "Invalid username or password", password: "" });
+    }
   };
 
   return (
-    <Container maxWidth="xs">
-      <Box sx={{ marginTop: 4, padding: 2, boxShadow: 3 }}>
-        <Typography variant="h5" gutterBottom>
-          Login
-        </Typography>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500">
+      <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
+        <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">Login</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-medium mb-2">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={data.username}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                error.username ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {error.username && <p className="text-red-500 text-sm mt-1">{error.username}</p>}
+          </div>
 
-        {/* Username Field */}
-        <TextField
-          label="Username"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)} // Update username state
-          error={Boolean(errors.username)} // Highlight field in case of error
-          helperText={errors.username || ''} // Show error message
-        />
+          <div className="mb-6">
+            <label className="block text-gray-700 font-medium mb-2">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={data.password}
+              onChange={handleChange}
+              className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                error.password ? "border-red-500" : "border-gray-300"
+              }`}
+            />
+            {error.password && <p className="text-red-500 text-sm mt-1">{error.password}</p>}
+          </div>
 
-        {/* Password Field */}
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)} // Update password state
-          error={Boolean(errors.password)} // Highlight field in case of error
-          helperText={errors.password || ''} // Show error message
-        />
+          <button
+            type="submit"
+            className="w-full bg-gradient-to-r from-green-400 to-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:from-green-500 hover:to-blue-600 transition"
+          >
+            Login
+          </button>
 
-        {/* Login Button */}
-        <Button
-          fullWidth
-          variant="contained"
-          color="primary"
-          onClick={handleLogin} // Call login handler on click
-          sx={{ marginTop: 2 }}
-        >
-          Login
-        </Button>
-
-        {/* Redirect to Register Page */}
-        <Box sx={{ marginTop: 2, textAlign: 'center' }}>
-          <Typography variant="body2">
-            Don't have an account?{' '}
-            <Link href="/register" sx={{ textDecoration: 'none', color: 'primary.main' }}>
+          <p className="text-center text-gray-600 mt-4">
+            Don't have an account?{" "}
+            <a href="/register" className="text-blue-600 underline hover:text-blue-800">
               Register
-            </Link>
-          </Typography>
-        </Box>
-      </Box>
-    </Container>
+            </a>
+          </p>
+        </form>
+      </div>
+    </div>
   );
 }
 
-export default LoginPage;
+export default Login;

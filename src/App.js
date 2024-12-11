@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {  Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./components/Ulogin";
-import Register from "./components/Uregister";
+import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
-import Navbar from './components/Navbar'
 import Expense from "./components/Expense";
 import { Context } from "./components/CreateContext";
+import Login from './components/Login'
+import ResponsiveAppBar from "./components/AppBar";
 
 function App() {
   const [expenses,setExpenses]=useState([])
@@ -47,10 +47,10 @@ function App() {
       
    
       <Context.Provider value={{isLoggedIn,totalExpense,setIsLoggedIn}}>
-    <Navbar/>
-      <div className="bg-gray-100 min-h-screen flex items-center justify-center">
+    <ResponsiveAppBar/>
+      <div>
         <Routes>
-          <Route path="/" element={<Dashboard/>} />
+          <Route path="/" element={<Login/>} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login/>}/>
           <Route path="/dashboard" element={<Dashboard/>}/>
