@@ -22,7 +22,7 @@ function Login() {
 
     if (user) {
       alert("Login Successful!");
-      navigate("/expense");
+      navigate("/dashboard");
     } else {
       setError({ username: "Invalid username or password", password: "" });
     }

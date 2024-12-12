@@ -1,11 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function Expense() {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
-  const [expenses, setExpenses] = useState([]);
-  const [editIndex, setEditIndex] = useState(null); // Track the index of the expense being edited
+  const [expenses, setExpenses] = useState(() => {
+    // Load expenses from localStorage on initial render
+    const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
+    return storedExpenses || [];
+  });
+  const [editIndex, setEditIndex] = useState(null);
+
+  useEffect(() => {
+    // Save expenses to localStorage whenever they change
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,14 +22,12 @@ function Expense() {
       const newExpense = { description, amount: parseFloat(amount), date };
 
       if (editIndex !== null) {
-        // Update existing expense
         const updatedExpenses = expenses.map((expense, index) =>
           index === editIndex ? newExpense : expense
         );
         setExpenses(updatedExpenses);
-        setEditIndex(null); // Reset editIndex after updating
+        setEditIndex(null);
       } else {
-        // Add new expense
         setExpenses([...expenses, newExpense]);
       }
 
@@ -42,19 +49,15 @@ function Expense() {
     setEditIndex(index);
   };
 
-  const calculateExpense = expenses.reduce(
-    (total, expense) => total + expense.amount,
-    0
-  );
+  const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-300 flex flex-col items-center py-10">
-      {/* Form Section */}
-      <div className="bg-blue-100 shadow-lg rounded-lg p-8 w-full max-w-md mt-20">
+    <div className="min-h-screen bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 flex flex-col items-center py-10">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">
           Expense Tracker
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4 bg-">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <input
             type="text"
             value={description}
@@ -84,7 +87,6 @@ function Expense() {
         </form>
       </div>
 
-      {/* Expense List Section */}
       <div className="mt-10 w-full max-w-2xl">
         {expenses.length > 0 && (
           <ul className="space-y-4">
@@ -98,8 +100,7 @@ function Expense() {
                     {expense.description}
                   </p>
                   <p className="text-gray-500">
-                    ${expense.amount.toFixed(2)} on{" "}
-                    {new Date(expense.date).toLocaleDateString()}
+                    ${expense.amount.toFixed(2)} on {new Date(expense.date).toLocaleDateString()}
                   </p>
                 </div>
                 <div className="space-x-2">
@@ -126,8 +127,11 @@ function Expense() {
             No expenses added yet.
           </p>
         )}
-        <div className="shadow-lg rounded-lg mt-10 w-full max-w-2xl-4 text-right">
-          <h3>Total Expense: ${calculateExpense.toFixed(2)}</h3>
+
+        <div className="bg-white shadow-lg rounded-lg mt-10 p-4 text-right">
+          <h3 className="text-lg font-bold text-gray-700">
+            Total Expense: ${totalExpense.toFixed(2)}
+          </h3>
         </div>
       </div>
     </div>
