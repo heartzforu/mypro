@@ -37,7 +37,6 @@ function Register() {
       const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
       localStorage.setItem("users", JSON.stringify([...existingUsers, data]));
 
-      alert("Registration Successful!");
       navigate("/login");
     } catch (err) {
       const newErrors = {};

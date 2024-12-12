@@ -21,7 +21,6 @@ function Login() {
     );
 
     if (user) {
-      alert("Login Successful!");
       navigate("/dashboard");
     } else {
       setError({ username: "Invalid username or password", password: "" });
