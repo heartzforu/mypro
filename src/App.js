@@ -38,16 +38,13 @@ function App() {
     }
   }, [expenses, isLoggedIn]);
 
-  // Logout function
-
-
+  // Total Expense calculation
   const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
+  
   return (
     <div>
-      
-   
       <Context.Provider value={{isLoggedIn,totalExpense,setIsLoggedIn}}>
-    <ResponsiveAppBar/>
+      <ResponsiveAppBar/>
       <div>
         <Routes>
           <Route path="/" element={<Login/>} />
@@ -58,7 +55,6 @@ function App() {
         </Routes>
       </div>
       </Context.Provider>
-    
     </div>
   );
 }

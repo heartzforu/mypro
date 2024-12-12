@@ -5,12 +5,25 @@ function Expense() {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [expenses, setExpenses] = useState([]);
+  const [editIndex, setEditIndex] = useState(null); // Track the index of the expense being edited
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (description && amount && date) {
       const newExpense = { description, amount: parseFloat(amount), date };
-      setExpenses([...expenses, newExpense]);
+
+      if (editIndex !== null) {
+        // Update existing expense
+        const updatedExpenses = expenses.map((expense, index) =>
+          index === editIndex ? newExpense : expense
+        );
+        setExpenses(updatedExpenses);
+        setEditIndex(null); // Reset editIndex after updating
+      } else {
+        // Add new expense
+        setExpenses([...expenses, newExpense]);
+      }
+
       setDescription("");
       setAmount("");
       setDate("");
@@ -20,14 +33,27 @@ function Expense() {
   const deleteExpense = (index) => {
     setExpenses(expenses.filter((_, i) => i !== index));
   };
-  const calculateExpense=expenses
-  .reduce((total,expense)=> total + expense.amount,0)
+
+  const editExpense = (index) => {
+    const updateExpense = expenses[index];
+    setDescription(updateExpense.description);
+    setAmount(updateExpense.amount.toString());
+    setDate(updateExpense.date);
+    setEditIndex(index);
+  };
+
+  const calculateExpense = expenses.reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-200 via-indigo-200 to-purple-300 flex flex-col items-center py-10">
       {/* Form Section */}
       <div className="bg-blue-100 shadow-lg rounded-lg p-8 w-full max-w-md mt-20">
-        <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">Expense Tracker</h2>
+        <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">
+          Expense Tracker
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4 bg-">
           <input
             type="text"
@@ -53,7 +79,7 @@ function Expense() {
             type="submit"
             className="w-full bg-blue-500 text-white py-3 rounded-lg hover:bg-blue-600 transition duration-200"
           >
-            Add Expense
+            {editIndex !== null ? "Update Expense" : "Add Expense"}
           </button>
         </form>
       </div>
@@ -72,28 +98,36 @@ function Expense() {
                     {expense.description}
                   </p>
                   <p className="text-gray-500">
-                    ${expense.amount.toFixed(2)} on {" "}
+                    ${expense.amount.toFixed(2)} on{" "}
                     {new Date(expense.date).toLocaleDateString()}
                   </p>
                 </div>
-                <button
-                  onClick={() => deleteExpense(index)}
-                  className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-                >
-                  Delete
-                </button>
+                <div className="space-x-2">
+                  <button
+                    onClick={() => editExpense(index)}
+                    className="bg-yellow-500 text-white px-3 py-2 rounded-lg hover:bg-yellow-600 transition duration-200"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={() => deleteExpense(index)}
+                    className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition duration-200"
+                  >
+                    Delete
+                  </button>
+                </div>
               </li>
             ))}
           </ul>
         )}
 
         {expenses.length === 0 && (
-          <p className="text-center text-gray-500 text-lg mt-10">No expenses added yet.</p>
+          <p className="text-center text-gray-500 text-lg mt-10">
+            No expenses added yet.
+          </p>
         )}
         <div className="shadow-lg rounded-lg mt-10 w-full max-w-2xl-4 text-right">
-          <h3>
-            Total Expense: ${calculateExpense.toFixed(2)}
-          </h3>
+          <h3>Total Expense: ${calculateExpense.toFixed(2)}</h3>
         </div>
       </div>
     </div>
