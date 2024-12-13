@@ -9,8 +9,6 @@ function Expense() {
     return storedExpenses || [];
   });
   const [editIndex, setEditIndex] = useState(null);
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
-  const [deleteIndex, setDeleteIndex] = useState(null);
 
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -51,21 +49,14 @@ function Expense() {
     setEditIndex(index);
   };
 
-  const confirmDelete = () => {
-    setExpenses(expenses.filter((_, i) => i !== deleteIndex));
-    setShowConfirmModal(false);
-    setDeleteIndex(null);
-  };
-
-  const cancelDelete = () => {
-    setShowConfirmModal(false);
-    setDeleteIndex(null);
-  };
-
-  const openConfirmModal = (index) => {
-    setDeleteIndex(index);
-    setShowConfirmModal(true);
-  };
+  const deleteExpense=(index)=>{
+    // Ask for confirmation before deleting
+    const isConfirmed=window.confirm('Are you sure you want to delete this expense?');
+    if(isConfirmed){
+      setExpenses(expenses.filter((_,i)=>i!==index));
+      // Remove expense by index
+    }
+  }
 
   const totalExpense = expenses.reduce(
     (total, expense) => total + expense.amount,
@@ -133,7 +124,7 @@ function Expense() {
                     Edit
                   </button>
                   <button
-                    onClick={() => openConfirmModal(index)}
+                    onClick={() => deleteExpense(index)}
                     className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition duration-200"
                   >
                     Delete
@@ -143,41 +134,18 @@ function Expense() {
             ))}
           </ul>
         )}
-        {expenses.length === 0 && (
+        {expenses.length === 0? (
           <p className="text-center text-gray-500 text-lg mt-10">
             No expenses added yet.
           </p>
-        )}
+        ):(
         <div className="bg-white shadow-lg rounded-lg mt-10 p-4 text-right">
           <h3 className="text-lg font-bold text-gray-700">
             Total Expense: ${totalExpense.toFixed(2)}
           </h3>
-        </div>
+        </div>)
+        }
       </div>
-
-      {showConfirmModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <p className="text-lg font-semibold mb-4">
-              Are you sure you want to delete this expense?
-            </p>
-            <div className="flex justify-end space-x-4">
-              <button
-                onClick={confirmDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
-              >
-                Delete
-              </button>
-              <button
-                onClick={cancelDelete}
-                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

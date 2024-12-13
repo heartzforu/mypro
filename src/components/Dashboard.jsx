@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Dashboard() {
+    const [expenses, setExpenses] = useState(() => {
+      const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
+      return storedExpenses || [];
+    });
+  const totalExpense = expenses.reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
   return (
     <div
       className="min-h-screen bg-cover bg-center flex items-center justify-center"
@@ -10,12 +18,18 @@ function Dashboard() {
         <p className="text-lg text-gray-600">
           Track and manage your expenses efficiently.
         </p>
+        <h3 className="text-lg font-bold text-gray-700 my-4">
+            You had a Total Expense of ${totalExpense.toFixed(2)}
+          </h3>
         <a
               href="/expense"
               className="text-blue-700 text-xl font-bold hover:text-blue-300 transition"
             >
-              Add Expense Here
+              Add more Expense
             </a>
+            <div className="bg-white shadow-lg rounded-lg mt-10 p-4 text-right">
+          
+        </div>
       </div>
     </div>
   );
