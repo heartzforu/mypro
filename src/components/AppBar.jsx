@@ -10,16 +10,17 @@ function ResponsiveNavbar() {
   const navigate = useNavigate();
   const location=useLocation()
   const { setIsLoggedIn } = useContext(Context);
-
+// Function to logout the user and navigate to login page
   const handleLogout = () => {
     localStorage.setItem("isLoggedIn", "false");
+    debugger;
     setIsLoggedIn(false);
-    navigate("/login");
+    navigate("/");
   };
 
   return (
     <>
-    {location.pathname !== '/login' && location.pathname !== "/register" && location.pathname !=='/' &&(
+    {location.pathname !== "/register" && location.pathname !=='/' &&(
     <nav className="fixed w-full bg-gradient-to-r from-green-400 via-pink-500 to-blue-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
@@ -27,7 +28,7 @@ function ResponsiveNavbar() {
           <div className="flex items-center">
             <MdAutoGraph className="text-yellow-300 text-4xl mr-3" />
             <a
-              href="/expense"
+              href="/dashboard"
               className="text-white text-2xl font-bold hover:text-yellow-300 transition"
             >
               Expense Tracker

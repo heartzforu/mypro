@@ -5,20 +5,22 @@ function Login() {
   const [data, setData] = useState({ username: "", password: "" });
   const [error, setError] = useState({ username: "", password: "" });
   const navigate = useNavigate();
-
+// Function to get values from input field
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-
+// Function to check data from the local storage
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const storedData = JSON.parse(localStorage.getItem("users"));
     const user = storedData?.find(
       (element) =>
+       
         element.username === data.username && element.password === data.password
     );
+    debugger;
 
     if (user) {
       navigate("/dashboard");
@@ -31,6 +33,7 @@ function Login() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-blue-100">
       <div className="bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <h1 className="text-3xl font-bold text-gray-800 mb-6 text-left">Login</h1>
+        {/*Login form section*/}
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-gray-700 font-medium mb-2">Username</label>
@@ -66,7 +69,7 @@ function Login() {
           >
             Login
           </button>
-
+              {/*Navigation to Add new user */}
           <p className="text-center text-gray-600 mt-4">
             Don't have an account?{" "}
             <a href="/register" className="text-blue-600 underline hover:text-blue-800">

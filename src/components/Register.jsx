@@ -11,7 +11,7 @@ function Register() {
     password: "",
   });
   const [errors, setErrors] = useState({});
-
+  // Yup form validation
   const validationSchema = yup.object().shape({
     name: yup.string().required("Name is required"),
     username: yup.string().required("Please select a username"),
@@ -26,7 +26,7 @@ function Register() {
     const { name, value } = e.target;
     setData({ ...data, [name]: value });
   };
-
+  //Set data to the localStorage
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -37,7 +37,7 @@ function Register() {
       const existingUsers = JSON.parse(localStorage.getItem("users")) || [];
       localStorage.setItem("users", JSON.stringify([...existingUsers, data]));
 
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       const newErrors = {};
       err.inner.forEach((error) => {
@@ -53,6 +53,7 @@ function Register() {
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
           Create a New Account
         </h2>
+        {/*Register form section */}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label htmlFor="name" className="block text-lg text-gray-700">
@@ -133,10 +134,11 @@ function Register() {
             Sign Up
           </button>
         </form>
+        {/*Navigation to registered users */}
         <p className="mt-4 text-center text-gray-600">
           Already have an account?{" "}
           <a
-            href="/login"
+            href="/"
             className="text-blue-600 underline hover:text-blue-800"
           >
             Log In

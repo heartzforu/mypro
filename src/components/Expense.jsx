@@ -5,14 +5,19 @@ function Expense() {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [expenses, setExpenses] = useState(() => {
-    // Load expenses from localStorage on initial render
     const storedExpenses = JSON.parse(localStorage.getItem("expenses"));
     return storedExpenses || [];
   });
   const [editIndex, setEditIndex] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [deleteIndex, setDeleteIndex] = useState(null);
 
   useEffect(() => {
-    // Save expenses to localStorage whenever they change
+    const today = new Date().toISOString().split("T")[0];
+    setDate(today);
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem("expenses", JSON.stringify(expenses));
   }, [expenses]);
 
@@ -33,12 +38,9 @@ function Expense() {
 
       setDescription("");
       setAmount("");
-      setDate("");
+      const today = new Date().toISOString().split("T")[0];
+      setDate(today);
     }
-  };
-
-  const deleteExpense = (index) => {
-    setExpenses(expenses.filter((_, i) => i !== index));
   };
 
   const editExpense = (index) => {
@@ -49,15 +51,34 @@ function Expense() {
     setEditIndex(index);
   };
 
-  const totalExpense = expenses.reduce((total, expense) => total + expense.amount, 0);
+  const confirmDelete = () => {
+    setExpenses(expenses.filter((_, i) => i !== deleteIndex));
+    setShowConfirmModal(false);
+    setDeleteIndex(null);
+  };
+
+  const cancelDelete = () => {
+    setShowConfirmModal(false);
+    setDeleteIndex(null);
+  };
+
+  const openConfirmModal = (index) => {
+    setDeleteIndex(index);
+    setShowConfirmModal(true);
+  };
+
+  const totalExpense = expenses.reduce(
+    (total, expense) => total + expense.amount,
+    0
+  );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-200 via-blue-300 to-purple-400 flex flex-col items-center py-10">
-      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-100 flex flex-col items-center py-10 pt-28">
+      <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md ">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">
-          Expense Tracker
+          Add Expense
         </h2>
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-4 ">
           <input
             type="text"
             value={description}
@@ -100,7 +121,8 @@ function Expense() {
                     {expense.description}
                   </p>
                   <p className="text-gray-500">
-                    ${expense.amount.toFixed(2)} on {new Date(expense.date).toLocaleDateString()}
+                    ${expense.amount.toFixed(2)} on{" "}
+                    {new Date(expense.date).toISOString().split("T")[0]}
                   </p>
                 </div>
                 <div className="space-x-2">
@@ -111,7 +133,7 @@ function Expense() {
                     Edit
                   </button>
                   <button
-                    onClick={() => deleteExpense(index)}
+                    onClick={() => openConfirmModal(index)}
                     className="bg-red-500 text-white px-3 py-2 rounded-lg hover:bg-red-600 transition duration-200"
                   >
                     Delete
@@ -121,19 +143,41 @@ function Expense() {
             ))}
           </ul>
         )}
-
         {expenses.length === 0 && (
           <p className="text-center text-gray-500 text-lg mt-10">
             No expenses added yet.
           </p>
         )}
-
         <div className="bg-white shadow-lg rounded-lg mt-10 p-4 text-right">
           <h3 className="text-lg font-bold text-gray-700">
             Total Expense: ${totalExpense.toFixed(2)}
           </h3>
         </div>
       </div>
+
+      {showConfirmModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <p className="text-lg font-semibold mb-4">
+              Are you sure you want to delete this expense?
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
+              >
+                Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-400 transition duration-200"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
