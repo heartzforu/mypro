@@ -21,7 +21,7 @@ function ResponsiveNavbar() {
   return (
     <>
     {location.pathname !== "/register" && location.pathname !=='/' &&(
-    <nav className="fixed w-full bg-gradient-to-r from-green-400 via-pink-500 to-blue-600 shadow-lg">
+    <nav className="fixed w-full bg-gradient-to-r from-blue-400 to-blue-600 shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo Section */}
@@ -40,7 +40,7 @@ function ResponsiveNavbar() {
             <FaUserCircle className="text-white text-3xl hover:text-yellow-300 transition cursor-pointer"  />
             <button
             onClick={handleLogout} 
-            className="block w-full text-white text-left font-medium py-2 hover:bg-purple-700 rounded-lg transition"
+            className="block w-full text-white text-left hover:text-yellow-300 font-medium py-2 "
           >
             Logout
           </button>

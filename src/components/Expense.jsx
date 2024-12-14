@@ -64,7 +64,7 @@ function Expense() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-100 to-blue-100 flex flex-col items-center py-10 pt-28">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-50 flex flex-col items-center py-10 pt-28">
       <div className="bg-white shadow-lg rounded-lg p-8 w-full max-w-md ">
         <h2 className="text-2xl font-bold text-gray-700 text-center mb-4">
           Add Expense

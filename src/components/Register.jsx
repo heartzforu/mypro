@@ -39,6 +39,8 @@ function Register() {
 
       navigate("/");
     } catch (err) {
+
+      
       const newErrors = {};
       err.inner.forEach((error) => {
         newErrors[error.path] = error.message;
@@ -48,7 +50,7 @@ function Register() {
   };
 
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-teal-100 to-teal-100">
+    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-teal-50">
       <div className="bg-white bg-opacity-90 p-8 rounded-lg shadow-lg max-w-lg w-full backdrop-blur-md ">
         <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">
           Create a New Account
